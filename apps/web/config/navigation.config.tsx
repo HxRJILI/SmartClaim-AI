@@ -1,29 +1,70 @@
-import { Home, User } from 'lucide-react';
+// apps/web/config/navigation.config.tsx
+import { 
+  Home, 
+  Ticket, 
+  Building2, 
+  Shield, 
+  User,
+  LayoutDashboard,
+  Users,
+  Settings,
+  ClipboardList
+} from 'lucide-react';
 import { z } from 'zod';
 
-import { NavigationConfigSchema } from '@kit/ui/navigation-schema';
+import { NavigationConfigSchema } from '@kit/ui/makerkit/navigation-config.schema';
 
-import pathsConfig from '~/config/paths.config';
+import pathsConfig from './paths.config';
 
 const iconClasses = 'w-4';
 
 const routes = [
   {
-    label: 'common:routes.application',
+    label: 'SmartClaim',
     children: [
       {
-        label: 'common:routes.home',
-        path: pathsConfig.app.home,
-        Icon: <Home className={iconClasses} />,
+        label: 'Dashboard',
+        path: pathsConfig.app.dashboard,
+        Icon: <LayoutDashboard className={iconClasses} />,
         end: true,
+      },
+      {
+        label: 'My Tickets',
+        path: pathsConfig.app.tickets,
+        Icon: <Ticket className={iconClasses} />,
       },
     ],
   },
   {
-    label: 'common:routes.settings',
+    label: 'Management',
     children: [
       {
-        label: 'common:routes.profile',
+        label: 'Department',
+        path: pathsConfig.app.department,
+        Icon: <Building2 className={iconClasses} />,
+      },
+      {
+        label: 'Ticket Management',
+        path: pathsConfig.app.departmentTickets,
+        Icon: <ClipboardList className={iconClasses} />,
+      },
+      {
+        label: 'Admin Dashboard',
+        path: pathsConfig.app.admin,
+        Icon: <Shield className={iconClasses} />,
+      },
+      {
+        label: 'User Management',
+        path: pathsConfig.app.adminUsers,
+        Icon: <Users className={iconClasses} />,
+      },
+    ],
+  },
+  {
+    label: 'Account',
+    children: [
+      {
+        label: 'Profile Settings',
         path: pathsConfig.app.profileSettings,
         Icon: <User className={iconClasses} />,
       },
@@ -33,6 +74,6 @@ const routes = [
 
 export const navigationConfig = NavigationConfigSchema.parse({
   routes,
-  style: process.env.NEXT_PUBLIC_NAVIGATION_STYLE,
-  sidebarCollapsed: process.env.NEXT_PUBLIC_HOME_SIDEBAR_COLLAPSED,
+  style: process.env.NEXT_PUBLIC_NAVIGATION_STYLE ?? 'sidebar',
+  sidebarCollapsed: process.env.NEXT_PUBLIC_HOME_SIDEBAR_COLLAPSED === 'true',
 });

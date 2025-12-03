@@ -55,6 +55,10 @@ const AppConfigSchema = z
   )
   .refine(
     (schema) => {
+      // Allow same colors in development for easier debugging
+      if (process.env.NODE_ENV !== 'production') {
+        return true;
+      }
       return schema.themeColor !== schema.themeColorDark;
     },
     {

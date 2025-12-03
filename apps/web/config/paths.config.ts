@@ -1,3 +1,4 @@
+// apps/web/config/paths.config.ts
 import { z } from 'zod';
 
 const PathsSchema = z.object({
@@ -11,6 +12,15 @@ const PathsSchema = z.object({
   }),
   app: z.object({
     home: z.string().min(1),
+    dashboard: z.string().min(1),
+    tickets: z.string().min(1),
+    ticketDetails: z.string().min(1),
+    department: z.string().min(1),
+    departmentTickets: z.string().min(1),
+    departmentTicketDetails: z.string().min(1),
+    admin: z.string().min(1),
+    adminUsers: z.string().min(1),
+    onboarding: z.string().min(1),
     profileSettings: z.string().min(1),
   }),
 });
@@ -25,8 +35,17 @@ const pathsConfig = PathsSchema.parse({
     passwordUpdate: '/update-password',
   },
   app: {
-    home: '/home',
-    profileSettings: '/home/settings',
+    home: '/smartclaim/dashboard',
+    dashboard: '/smartclaim/dashboard',
+    tickets: '/smartclaim/tickets',
+    ticketDetails: '/smartclaim/tickets/:id',
+    department: '/smartclaim/department',
+    departmentTickets: '/smartclaim/department/tickets',
+    departmentTicketDetails: '/smartclaim/department/tickets/:id',
+    admin: '/smartclaim/admin',
+    adminUsers: '/smartclaim/admin/users',
+    onboarding: '/smartclaim/onboarding',
+    profileSettings: '/smartclaim/settings',
   },
 } satisfies z.infer<typeof PathsSchema>);
 

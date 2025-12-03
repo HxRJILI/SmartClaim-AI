@@ -1,71 +1,49 @@
-import Link from 'next/link';
+"use client";
 
-import { ArrowLeft } from 'lucide-react';
+import Link from "next/link";
+import { Button } from "@kit/ui/button";
+import { AlertCircle } from "lucide-react";
 
-import { getSupabaseServerClient } from '@kit/supabase/server-client';
-import { Button } from '@kit/ui/button';
-import { Heading } from '@kit/ui/heading';
-import { Trans } from '@kit/ui/trans';
+/**
+ * SmartClaim not-found page
+ * - Replaces the marketing SiteHeader dependency with a small, self-contained view
+ * - Client component because it uses UI primitives (next/link / kit UI)
+ *
+ * Paste this content into apps/web/app/not-found.tsx
+ */
 
-import { SiteHeader } from '~/(marketing)/_components/site-header';
-import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
-import { withI18n } from '~/lib/i18n/with-i18n';
-
-export const generateMetadata = async () => {
-  const i18n = await createI18nServerInstance();
-  const title = i18n.t('common:notFound');
-
-  return {
-    title,
-  };
-};
-
-const NotFoundPage = async () => {
-  const client = getSupabaseServerClient();
-
-  const { data } = await client.auth.getClaims();
-
+export default function NotFound() {
   return (
-    <div className={'flex h-screen flex-1 flex-col'}>
-      <SiteHeader user={data?.claims} />
-
-      <div
-        className={
-          'container m-auto flex w-full flex-1 flex-col items-center justify-center'
-        }
-      >
-        <div className={'flex flex-col items-center space-y-12'}>
-          <div>
-            <h1 className={'font-heading text-8xl font-extrabold xl:text-9xl'}>
-              <Trans i18nKey={'common:pageNotFoundHeading'} />
-            </h1>
-          </div>
-
-          <div className={'flex flex-col items-center space-y-8'}>
-            <div className={'flex flex-col items-center space-y-2.5'}>
-              <div>
-                <Heading level={1}>
-                  <Trans i18nKey={'common:pageNotFound'} />
-                </Heading>
-              </div>
-
-              <p className={'text-muted-foreground'}>
-                <Trans i18nKey={'common:pageNotFoundSubHeading'} />
-              </p>
-            </div>
-
-            <Button asChild variant={'outline'}>
-              <Link href={'/'}>
-                <ArrowLeft className={'mr-2 h-4'} />
-
-                <Trans i18nKey={'common:backToHomePage'} />
-              </Link>
-            </Button>
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-background p-6">
+      <div className="max-w-xl w-full text-center space-y-6">
+        <div className="inline-flex items-center justify-center rounded-full bg-yellow-100 w-16 h-16 mx-auto">
+          <AlertCircle className="h-8 w-8 text-yellow-700" />
         </div>
+
+        <h1 className="text-2xl sm:text-3xl font-semibold">Page not found</h1>
+
+        <p className="text-sm text-muted-foreground">
+          The page you are looking for doesn't exist or has been moved. Use the links below to continue.
+        </p>
+
+        <div className="flex items-center justify-center gap-3">
+          <Button asChild>
+            <Link href="/smartclaim/dashboard">Go to Dashboard</Link>
+          </Button>
+
+          <Button asChild variant="outline">
+            <Link href="/smartclaim/tickets">My Tickets</Link>
+          </Button>
+
+          <Button asChild variant="ghost">
+            <Link href="/auth/sign-in">Sign In</Link>
+          </Button>
+        </div>
+
+        <p className="text-xs text-muted-foreground mt-2">
+          If you believe this is an error, contact your administrator.
+        </p>
       </div>
     </div>
   );
-};
-
-export default withI18n(NotFoundPage);
+}

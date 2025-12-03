@@ -1,0 +1,46 @@
+# python-services/docker-compose.yml
+version: '3.8'
+
+services:
+  extractor:
+    build: ./extractor
+    ports:
+      - "8000:8000"
+    environment:
+      - LOG_LEVEL=info
+    volumes:
+      - ./extractor:/app
+    restart: unless-stopped
+
+  classifier:
+    build: ./classifier
+    ports:
+      - "8001:8001"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-AIzaSyBkuu6HZHTrMqtni0rsqepjhyyppu5Oh1U}
+      - LOG_LEVEL=info
+    volumes:
+      - ./classifier:/app
+    restart: unless-stopped
+
+  chat:
+    build: ./chat
+    ports:
+      - "8002:8002"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-AIzaSyBkuu6HZHTrMqtni0rsqepjhyyppu5Oh1U}
+      - LOG_LEVEL=info
+    volumes:
+      - ./chat:/app
+    restart: unless-stopped
+
+  transcriber:
+    build: ./transcriber
+    ports:
+      - "8003:8003"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - LOG_LEVEL=info
+    volumes:
+      - ./transcriber:/app
+    restart: unless-stopped

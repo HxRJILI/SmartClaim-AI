@@ -1,77 +1,52 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Link from "next/link";
+import { Button } from "@kit/ui/button";
+import { AlertTriangle } from "lucide-react";
 
-import { ArrowLeft, MessageCircle } from 'lucide-react';
+/**
+ * Simple Error Page for SmartClaim
+ * - Client Component (uses "use client")
+ * - Basic message and links to dashboard / sign-in
+ */
 
-import { Button } from '@kit/ui/button';
-import { Heading } from '@kit/ui/heading';
-import { Trans } from '@kit/ui/trans';
-
-import { SiteHeader } from '~/(marketing)/_components/site-header';
-
-const ErrorPage = ({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) => {
-  console.error(error);
+export default function ErrorPage({ error }: { error: Error }) {
+  // Log server-side via console (visible in server logs)
+  // eslint-disable-next-line no-console
+  console.error("Unhandled error (ErrorPage):", error);
 
   return (
-    <div className={'flex h-screen flex-1 flex-col'}>
-      <SiteHeader />
-
-      <div
-        className={
-          'container m-auto flex w-full flex-1 flex-col items-center justify-center'
-        }
-      >
-        <div className={'flex flex-col items-center space-y-8'}>
-          <div>
-            <h1 className={'font-heading text-9xl font-semibold'}>
-              <Trans i18nKey={'common:errorPageHeading'} />
-            </h1>
-          </div>
-
-          <div className={'flex flex-col items-center space-y-8'}>
-            <div
-              className={
-                'flex max-w-xl flex-col items-center space-y-1 text-center'
-              }
-            >
-              <div>
-                <Heading level={2}>
-                  <Trans i18nKey={'common:genericError'} />
-                </Heading>
-              </div>
-
-              <p className={'text-muted-foreground text-lg'}>
-                <Trans i18nKey={'common:genericErrorSubHeading'} />
-              </p>
-            </div>
-
-            <div className={'flex space-x-4'}>
-              <Button className={'w-full'} variant={'default'} onClick={reset}>
-                <ArrowLeft className={'mr-2 h-4'} />
-
-                <Trans i18nKey={'common:goBack'} />
-              </Button>
-
-              <Button className={'w-full'} variant={'outline'} asChild>
-                <Link href={'/contact'}>
-                  <MessageCircle className={'mr-2 h-4'} />
-
-                  <Trans i18nKey={'common:contactUs'} />
-                </Link>
-              </Button>
-            </div>
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-background p-6">
+      <div className="max-w-xl w-full text-center space-y-6">
+        <div className="inline-flex items-center justify-center rounded-full bg-red-100 w-16 h-16 mx-auto">
+          <AlertTriangle className="h-8 w-8 text-red-600" />
         </div>
+
+        <h1 className="text-2xl sm:text-3xl font-semibold">Something went wrong</h1>
+
+        <p className="text-sm text-muted-foreground">
+          An unexpected error occurred while loading this page.
+          If the problem persists, try signing out and signing back in, or contact your administrator.
+        </p>
+
+        <div className="flex items-center justify-center gap-3">
+          <Button asChild>
+            <Link href="/smartclaim/dashboard">Go to Dashboard</Link>
+          </Button>
+
+          <Button asChild variant="outline">
+            <Link href="/auth/sign-in">Sign In</Link>
+          </Button>
+        </div>
+
+        <details className="text-left text-xs text-muted-foreground mt-4 p-3 bg-muted/10 rounded-md">
+          <summary className="cursor-pointer">Technical details (expand)</summary>
+          <pre className="mt-2 whitespace-pre-wrap break-words text-xs">
+            {error?.message}
+            {error?.stack ? "\n\n" + error.stack : ""}
+          </pre>
+        </details>
       </div>
     </div>
   );
-};
-
-export default ErrorPage;
+}
