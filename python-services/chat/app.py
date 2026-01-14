@@ -30,8 +30,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize Gemini
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyBkuu6HZHTrMqtni0rsqepjhyyppu5Oh1U")
+# Initialize Gemini - API key from environment only (no hardcoded fallback)
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+if not GEMINI_API_KEY:
+    logger.error("GEMINI_API_KEY environment variable not set!")
+    raise ValueError("GEMINI_API_KEY environment variable is required")
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 # RAG Service URL

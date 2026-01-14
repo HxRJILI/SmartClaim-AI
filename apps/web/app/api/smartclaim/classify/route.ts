@@ -2,7 +2,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@kit/supabase/server-client';
 
+// Service configuration
+const CLASSIFIER_URL = process.env.CLASSIFIER_URL || 'http://localhost:8001';
+const REQUEST_TIMEOUT_MS = 30000; // 30 seconds
+
 export async function POST(request: NextRequest) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  
   try {
     const supabase = getSupabaseServerClient();
     
@@ -26,8 +33,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Call classification service
-    const classificationResponse = await fetch('http://localhost:8001/classify', {
+    // Call classification service with timeout
+    const classificationResponse = await fetch(`${CLASSIFIER_URL}/classify`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,10 +44,13 @@ export async function POST(request: NextRequest) {
         context,
         user_id: user.id,
       }),
+      signal: controller.signal,
     });
 
     if (!classificationResponse.ok) {
-      throw new Error('Classification failed');
+      const errorText = await classificationResponse.text();
+      console.error('Classification service error:', errorText);
+      throw new Error(`Classification failed: ${classificationResponse.status}`);
     }
 
     const result = await classificationResponse.json();
@@ -62,9 +72,20 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Classification error:', error);
+    
+    // Handle timeout specifically
+    if (error instanceof Error && error.name === 'AbortError') {
+      return NextResponse.json(
+        { error: 'Classification service timeout', details: 'Request exceeded 30 seconds' },
+        { status: 504 }
+      );
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to classify ticket' },
+      { error: 'Failed to classify ticket', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
+  } finally {
+    clearTimeout(timeoutId);
   }
 }

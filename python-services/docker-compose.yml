@@ -68,7 +68,7 @@ services:
     ports:
       - "8004:8004"
     environment:
-      - GEMINI_API_KEY=${GEMINI_API_KEY:-AIzaSyBkuu6HZHTrMqtni0rsqepjhyyppu5Oh1U}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
       - SUPABASE_URL=${SUPABASE_URL:-http://host.docker.internal:54321}
@@ -78,6 +78,50 @@ services:
       - ./rag:/app
     depends_on:
       - qdrant
+    restart: unless-stopped
+
+  # Vision Language Model (LVM) Service
+  lvm:
+    build: ./lvm
+    ports:
+      - "8005:8005"
+    environment:
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - SITE_URL=https://smartclaim.ai
+      - SITE_NAME=SmartClaim AI
+      - LVM_PORT=8005
+      - LVM_TIMEOUT=60
+      - LOG_LEVEL=info
+    volumes:
+      - ./lvm:/app
+    restart: unless-stopped
+
+  # Multimodal Evidence Aggregator Service
+  aggregator:
+    build: ./aggregator
+    ports:
+      - "8006:8006"
+    environment:
+      - CLASSIFIER_URL=http://classifier:8001
+      - LVM_URL=http://lvm:8005
+      - LOG_LEVEL=info
+    volumes:
+      - ./aggregator:/app
+    depends_on:
+      - classifier
+      - lvm
+    restart: unless-stopped
+
+  # Predictive SLA Service
+  sla:
+    build: ./sla
+    ports:
+      - "8007:8007"
+    environment:
+      - SLA_MODEL_PATH=/app/models/sla_model.pkl
+      - LOG_LEVEL=info
+    volumes:
+      - ./sla:/app
     restart: unless-stopped
 
 volumes:

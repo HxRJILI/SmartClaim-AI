@@ -39,9 +39,10 @@ async function getSmartClaimSupabaseClient() {
 export default async function TicketManagementPage({
   searchParams,
 }: {
-  searchParams: { status?: string; category?: string; priority?: string; search?: string };
+  searchParams: Promise<{ status?: string; category?: string; priority?: string; search?: string }>;
 }) {
   const supabase = await getSmartClaimSupabaseClient();
+  const params = await searchParams;
   
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -71,17 +72,17 @@ export default async function TicketManagementPage({
     .eq('assigned_to_department', userProfile.department_id);
 
   // Apply filters
-  if (searchParams.status) {
-    query = query.eq('status', searchParams.status);
+  if (params.status) {
+    query = query.eq('status', params.status);
   }
-  if (searchParams.category) {
-    query = query.eq('category', searchParams.category);
+  if (params.category) {
+    query = query.eq('category', params.category);
   }
-  if (searchParams.priority) {
-    query = query.eq('priority', searchParams.priority);
+  if (params.priority) {
+    query = query.eq('priority', params.priority);
   }
-  if (searchParams.search) {
-    query = query.or(`title.ilike.%${searchParams.search}%,ticket_number.ilike.%${searchParams.search}%`);
+  if (params.search) {
+    query = query.or(`title.ilike.%${params.search}%,ticket_number.ilike.%${params.search}%`);
   }
 
   const { data: tickets } = await query.order('created_at', { ascending: false });

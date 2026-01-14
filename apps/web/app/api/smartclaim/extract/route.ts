@@ -2,7 +2,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@kit/supabase/server-client';
 
+// Service configuration
+const EXTRACTOR_URL = process.env.EXTRACTOR_URL || 'http://localhost:8000';
+const REQUEST_TIMEOUT_MS = 60000; // 60 seconds for file processing
+
 export async function POST(request: NextRequest) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  
   try {
     const supabase = getSupabaseServerClient();
     
@@ -30,14 +37,17 @@ export async function POST(request: NextRequest) {
     const extractorFormData = new FormData();
     extractorFormData.append('file', file);
     
-    // Call Python extractor microservice
-    const extractorResponse = await fetch('http://localhost:8000/extract', {
+    // Call Python extractor microservice with timeout
+    const extractorResponse = await fetch(`${EXTRACTOR_URL}/extract`, {
       method: 'POST',
       body: extractorFormData,
+      signal: controller.signal,
     });
 
     if (!extractorResponse.ok) {
-      throw new Error('File extraction failed');
+      const errorText = await extractorResponse.text();
+      console.error('Extractor service error:', errorText);
+      throw new Error(`File extraction failed: ${extractorResponse.status}`);
     }
 
     const { text, metadata } = await extractorResponse.json();
@@ -52,9 +62,20 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('File extraction error:', error);
+    
+    // Handle timeout specifically
+    if (error instanceof Error && error.name === 'AbortError') {
+      return NextResponse.json(
+        { error: 'File extraction timeout', details: 'Request exceeded 60 seconds' },
+        { status: 504 }
+      );
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to extract text from file' },
+      { error: 'Failed to extract text from file', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
+  } finally {
+    clearTimeout(timeoutId);
   }
 }

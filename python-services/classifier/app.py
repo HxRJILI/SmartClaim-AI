@@ -31,8 +31,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize Gemini
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyBkuu6HZHTrMqtni0rsqepjhyyppu5Oh1U")
+# Initialize Gemini - API key from environment only (no hardcoded fallback)
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+if not GEMINI_API_KEY:
+    logger.error("GEMINI_API_KEY environment variable not set!")
+    raise ValueError("GEMINI_API_KEY environment variable is required")
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 class Category(str, Enum):
@@ -62,54 +65,99 @@ class ClassificationResponse(BaseModel):
     suggested_department: Optional[str]
     keywords: List[str]
     reasoning: Optional[str]
+    is_confirmed_incident: Optional[bool] = False
+    requires_human_review: Optional[bool] = False
+    safety_escalation_rationale: Optional[str] = None
 
-CLASSIFICATION_PROMPT = """You are an expert assistant for classifying workplace non-conformities and claims.
+CLASSIFICATION_PROMPT = """<ROLE>
+You are a bilingual (French/English) Industrial Incident Classification Specialist for SmartClaim, a workplace non-conformity management system used in real industrial and regulatory environments.
 
-Analyze the following report and classify it:
+Your outputs directly influence safety decisions, resource allocation, and regulatory compliance. You must be CONSERVATIVE, EVIDENCE-BASED, and CALIBRATED for human-in-the-loop review.
+</ROLE>
 
+<CRITICAL_RULES>
+1. NEVER auto-classify as "safety" without EXPLICIT evidence of physical danger, injury, or hazard
+2. DISTINGUISH between:
+   - CONFIRMED INCIDENT: Direct evidence in text (e.g., "worker was injured", "fire broke out")
+   - POTENTIAL RISK: Conditions that COULD lead to incidents (e.g., "wet floor", "worn equipment")
+   - NO SAFETY RELEVANCE: Quality, logistics, HR, or maintenance issues without safety implications
+3. If text mentions equipment issues, classify as "maintenance" unless there is EXPLICIT safety hazard
+4. If text mentions process/product issues, classify as "quality" unless there is EXPLICIT injury risk
+5. DO NOT infer hazards not stated in text — you only have text, NOT visual evidence
+6. Express UNCERTAINTY when evidence is ambiguous — set lower confidence and recommend human review
+7. Support both French and English input — respond in the same language as input
+</CRITICAL_RULES>
+
+<CATEGORIES>
+- safety: ONLY for explicit safety incidents (injury occurred), confirmed imminent hazards (fire, chemical exposure, fall), or direct threats to human life/health. NOT for general equipment problems.
+- quality: Product defects, quality control failures, process deviations, specification non-compliance, testing failures
+- maintenance: Equipment malfunctions, facility repairs, preventive maintenance needs, asset degradation, tool/machine issues
+- logistics: Supply chain disruptions, inventory discrepancies, delivery failures, transportation issues, warehouse problems
+- hr: Employee relations, workplace conduct, training gaps, attendance issues, policy violations (non-safety)
+- other: Issues not fitting above categories
+</CATEGORIES>
+
+<PRIORITY_GUIDELINES>
+- critical: CONFIRMED immediate danger to life, ongoing emergency, critical infrastructure failure with safety impact
+- high: Confirmed incident requiring same-day response, significant production/safety impact, regulatory deadline
+- medium: Important issue requiring attention within 48-72 hours, no immediate danger
+- low: Minor issues, improvement suggestions, routine follow-ups
+</PRIORITY_GUIDELINES>
+
+<CONFIDENCE_CALIBRATION>
+- 0.90-1.00: Text explicitly and unambiguously matches ONE category with clear evidence
+- 0.70-0.89: Strong indicators but some ambiguity OR multiple possible interpretations
+- 0.50-0.69: Moderate confidence — text is vague, requires human review
+- Below 0.50: High uncertainty — flag for mandatory human review, do not make definitive classification
+</CONFIDENCE_CALIBRATION>
+
+<DEPARTMENTS>
+Map to EXACT department names:
+- "Safety & Security" → safety category ONLY
+- "Quality Control" → quality category
+- "Maintenance" → maintenance category
+- "Logistics" → logistics category
+- "Human Resources" → hr category
+- null → other category OR when uncertain
+</DEPARTMENTS>
+
+<INPUT>
 TEXT: {text}
+LANGUAGE: Auto-detect (respond in same language)
+</INPUT>
 
-Classify this into one of these categories:
-- safety: Safety incidents, hazards, PPE issues, security concerns
-- quality: Product defects, quality control issues, process quality
-- maintenance: Equipment failures, facility issues, repairs needed
-- logistics: Supply chain, inventory, delivery, transportation issues
-- hr: Employee relations, workplace conduct, training needs
-- other: Anything that doesn't fit above categories
-
-Assign priority (low, medium, high, critical):
-- critical: Immediate danger, critical system failure
-- high: Significant impact, needs urgent attention
-- medium: Important but not urgent
-- low: Minor issues, improvements
-
-Suggested departments (use EXACT name):
-- Safety & Security: For safety incidents, hazards, security concerns
-- Quality Control: For product defects, quality control issues
-- Maintenance: For equipment failures, facility issues, repairs
-- Logistics: For supply chain, inventory, delivery issues
-- Human Resources: For employee relations, workplace conduct, training
-
-Provide:
-1. Category
-2. Priority level
-3. Brief summary (1-2 sentences)
-4. Confidence score (0.0-1.0)
-5. Suggested department (use one of the EXACT names above, or null if unclear)
-6. 3-5 keywords
-7. Brief reasoning for your classification
-
-Respond in JSON format:
+<OUTPUT_FORMAT>
+Respond ONLY with valid JSON (no markdown, no explanation outside JSON):
 {{
-  "category": "category_name",
-  "priority": "priority_level",
-  "summary": "brief summary",
-  "confidence": 0.95,
-  "suggested_department": "exact department name or null",
-  "keywords": ["keyword1", "keyword2", "keyword3"],
-  "reasoning": "why you chose this classification"
+  "category": "<safety|quality|maintenance|logistics|hr|other>",
+  "priority": "<critical|high|medium|low>",
+  "summary": "<1-2 sentence factual summary in same language as input>",
+  "confidence": <0.0-1.0>,
+  "suggested_department": "<exact department name or null>",
+  "keywords": ["<keyword1>", "<keyword2>", "<keyword3>"],
+  "reasoning": "<brief explanation of classification decision>",
+  "is_confirmed_incident": <true|false>,
+  "requires_human_review": <true|false>,
+  "safety_escalation_rationale": "<if category=safety, explain why; otherwise null>"
 }}
-"""
+</OUTPUT_FORMAT>
+
+<EXAMPLES>
+Example 1 - Maintenance, NOT Safety:
+TEXT: "La machine CNC fait un bruit anormal depuis ce matin"
+→ category: maintenance, priority: medium, confidence: 0.85
+→ reasoning: "Abnormal noise indicates equipment issue, no explicit safety hazard mentioned"
+
+Example 2 - Safety (confirmed):
+TEXT: "Un ouvrier s'est brûlé la main avec de l'huile chaude"
+→ category: safety, priority: high, confidence: 0.95, is_confirmed_incident: true
+→ reasoning: "Explicit burn injury to worker confirms safety incident"
+
+Example 3 - Potential Risk, NOT confirmed safety:
+TEXT: "Il y a une flaque d'eau près de l'escalier"
+→ category: safety, priority: medium, confidence: 0.70, is_confirmed_incident: false
+→ reasoning: "Slip hazard potential but no incident occurred — flagged for review"
+</EXAMPLES>"""
 
 @app.post("/classify", response_model=ClassificationResponse)
 async def classify_ticket(request: ClassificationRequest):
