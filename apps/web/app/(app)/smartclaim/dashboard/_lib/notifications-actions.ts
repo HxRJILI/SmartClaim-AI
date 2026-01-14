@@ -97,3 +97,26 @@ export async function markAllNotificationsAsRead() {
 
   revalidatePath('/smartclaim/dashboard');
 }
+
+export async function getUserRole(): Promise<string | null> {
+  const supabase = getSupabaseServerClient();
+  
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    return null;
+  }
+
+  const { data: profile, error } = await supabase
+    .from('user_profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+
+  if (error) {
+    console.error('Error fetching user role:', error);
+    return null;
+  }
+
+  return profile?.role || null;
+}

@@ -6,6 +6,7 @@ import { cookies } from 'next/headers';
 import type { Database } from '~/lib/database.types';
 import { TicketsTable } from './_components/tickets-table';
 import { TicketFilters } from './_components/ticket-filters';
+import { TicketsPageHeader } from './_components/page-header';
 
 export const metadata = {
   title: 'Ticket Management - SmartClaim',
@@ -115,12 +116,7 @@ export default async function TicketManagementPage({
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-7xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">Ticket Management</h1>
-        <p className="text-muted-foreground mt-2">
-          Manage tickets assigned to your department
-        </p>
-      </div>
+      <TicketsPageHeader />
 
       <div className="space-y-6">
         <TicketFilters />

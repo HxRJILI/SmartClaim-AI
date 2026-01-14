@@ -20,5 +20,16 @@ export async function addComment(ticketId: string, userId: string, content: stri
     throw new Error(error.message);
   }
 
+  // Resync ticket to RAG to include new comment
+  try {
+    await fetch('http://localhost:8004/ingest/ticket', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ticket_id: ticketId }),
+    });
+  } catch (ragError) {
+    console.error('RAG sync failed (non-critical):', ragError);
+  }
+
   revalidatePath(`/smartclaim/tickets/${ticketId}`);
 }

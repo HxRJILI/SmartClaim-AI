@@ -50,9 +50,27 @@ export async function createTicket(formData: FormData) {
         file_url: publicUrl,
       });
 
-      // TODO: Call file extraction API
-      // const extracted = await extractTextFromFile(file);
-      // extractedText += '\n' + extracted;
+      // Call file extraction API
+      try {
+        const extractionFormData = new FormData();
+        extractionFormData.append('file', file);
+
+        const extractionResponse = await fetch('http://localhost:8000/extract', {
+          method: 'POST',
+          body: extractionFormData,
+        });
+
+        if (extractionResponse.ok) {
+          const extractionData = await extractionResponse.json();
+          if (extractionData.success && extractionData.text) {
+             extractedText += `\n\n--- Extracted content from ${file.name} ---\n${extractionData.text}`;
+          }
+        } else {
+            console.error(`Failed to extract text from ${file.name}: ${extractionResponse.statusText}`);
+        }
+      } catch (error) {
+        console.error(`Error calling extraction service for ${file.name}:`, error);
+      }
     }
   }
 
@@ -75,9 +93,27 @@ export async function createTicket(formData: FormData) {
         file_url: publicUrl,
       });
 
-      // TODO: Call ASR API
-      // const transcribed = await transcribeAudio(voice);
-      // extractedText += '\n' + transcribed;
+      // Call ASR API
+      try {
+        const transcriptionFormData = new FormData();
+        transcriptionFormData.append('file', voice, 'recording.webm');
+
+        const transcriptionResponse = await fetch('http://localhost:8003/transcribe', {
+          method: 'POST',
+          body: transcriptionFormData,
+        });
+
+        if (transcriptionResponse.ok) {
+          const transcriptionData = await transcriptionResponse.json();
+          if (transcriptionData.text) {
+             extractedText += `\n\n--- Transcribed Voice Recording ---\n${transcriptionData.text}`;
+          }
+        } else {
+            console.error(`Failed to transcribe voice: ${transcriptionResponse.statusText}`);
+        }
+      } catch (error) {
+        console.error('Error calling transcription service:', error);
+      }
     }
   }
 
@@ -107,12 +143,45 @@ export async function createTicket(formData: FormData) {
       
       // Map suggested department to department ID
       if (classification.suggested_department) {
-        const { data: dept } = await supabase
+        // Try exact match first
+        let { data: dept } = await supabase
           .from('departments')
           .select('id')
-          .ilike('name', `%${classification.suggested_department}%`)
+          .eq('name', classification.suggested_department)
           .limit(1)
           .single();
+        
+        // If no exact match, try partial match
+        if (!dept) {
+          const result = await supabase
+            .from('departments')
+            .select('id')
+            .ilike('name', `%${classification.suggested_department}%`)
+            .limit(1)
+            .single();
+          dept = result.data;
+        }
+        
+        // If still no match, try matching based on category
+        if (!dept && category) {
+          const categoryToDept: Record<string, string> = {
+            'safety': 'Safety',
+            'quality': 'Quality',
+            'maintenance': 'Maintenance',
+            'logistics': 'Logistics',
+            'hr': 'Human',
+          };
+          const deptPartialName = categoryToDept[category];
+          if (deptPartialName) {
+            const result = await supabase
+              .from('departments')
+              .select('id')
+              .ilike('name', `%${deptPartialName}%`)
+              .limit(1)
+              .single();
+            dept = result.data;
+          }
+        }
         
         if (dept) {
           suggestedDepartment = dept.id;
@@ -166,8 +235,56 @@ export async function createTicket(formData: FormData) {
     content: 'Ticket created',
   });
 
+  // Notify department managers about the new ticket
+  if (suggestedDepartment) {
+    // Get all managers in the assigned department
+    const { data: departmentManagers } = await supabase
+      .from('user_profiles')
+      .select('id')
+      .eq('department_id', suggestedDepartment)
+      .eq('role', 'department_manager');
+
+    // Get worker's name for the notification
+    const { data: workerProfile } = await supabase
+      .from('user_profiles')
+      .select('full_name')
+      .eq('id', user.id)
+      .single();
+
+    const workerName = workerProfile?.full_name || 'A worker';
+
+    // Create notifications for each manager
+    if (departmentManagers && departmentManagers.length > 0) {
+      const notifications = departmentManagers.map(manager => ({
+        user_id: manager.id,
+        ticket_id: ticket.id,
+        title: `New Ticket Assigned: ${ticket.ticket_number}`,
+        message: `${workerName} submitted a new ${priority} priority ${category} ticket: "${title.substring(0, 80)}${title.length > 80 ? '...' : ''}"`,
+        type: 'new_ticket',
+        is_read: false,
+      }));
+
+      await supabase.from('notifications').insert(notifications);
+    }
+  }
+
+  // Sync ticket to RAG service for semantic search
+  try {
+    await fetch('http://localhost:8004/ingest/ticket', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ticket_id: ticket.id }),
+    });
+    console.log(`Ticket ${ticket.id} synced to RAG`);
+  } catch (ragError) {
+    // Don't fail ticket creation if RAG sync fails
+    console.error('RAG sync failed (non-critical):', ragError);
+  }
+
   revalidatePath('/smartclaim/dashboard');
   revalidatePath('/smartclaim/tickets');
+  revalidatePath('/smartclaim/department');
+  revalidatePath('/smartclaim/department/tickets');
 
   return ticket;
 }

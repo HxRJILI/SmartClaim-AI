@@ -83,12 +83,19 @@ Assign priority (low, medium, high, critical):
 - medium: Important but not urgent
 - low: Minor issues, improvements
 
+Suggested departments (use EXACT name):
+- Safety & Security: For safety incidents, hazards, security concerns
+- Quality Control: For product defects, quality control issues
+- Maintenance: For equipment failures, facility issues, repairs
+- Logistics: For supply chain, inventory, delivery issues
+- Human Resources: For employee relations, workplace conduct, training
+
 Provide:
 1. Category
 2. Priority level
 3. Brief summary (1-2 sentences)
 4. Confidence score (0.0-1.0)
-5. Suggested department (if applicable)
+5. Suggested department (use one of the EXACT names above, or null if unclear)
 6. 3-5 keywords
 7. Brief reasoning for your classification
 
@@ -98,7 +105,7 @@ Respond in JSON format:
   "priority": "priority_level",
   "summary": "brief summary",
   "confidence": 0.95,
-  "suggested_department": "department name or null",
+  "suggested_department": "exact department name or null",
   "keywords": ["keyword1", "keyword2", "keyword3"],
   "reasoning": "why you chose this classification"
 }}

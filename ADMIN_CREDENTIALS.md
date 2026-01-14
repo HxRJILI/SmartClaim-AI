@@ -47,6 +47,41 @@ These accounts have been pre-seeded in the database with fixed credentials:
 - **Department**: HR
 - **Permissions**: Can view and manage HR department tickets
 
+#### IT & Technology Department Manager
+- **Email**: `it.manager@smartclaim.com`
+- **Password**: `IT@2025`
+- **Role**: Department Manager
+- **Department**: IT & Technology
+- **Permissions**: Can view and manage IT department tickets
+
+#### Customer Service Department Manager
+- **Email**: `service.manager@smartclaim.com`
+- **Password**: `Service@2025`
+- **Role**: Department Manager
+- **Department**: Customer Service
+- **Permissions**: Can view and manage Customer Service department tickets
+
+#### Finance Department Manager
+- **Email**: `finance.manager@smartclaim.com`
+- **Password**: `Finance@2025`
+- **Role**: Department Manager
+- **Department**: Finance
+- **Permissions**: Can view and manage Finance department tickets
+
+#### Procurement & Stock Department Manager
+- **Email**: `procurement.manager@smartclaim.com`
+- **Password**: `Procurement@2025`
+- **Role**: Department Manager
+- **Department**: Procurement & Stock
+- **Permissions**: Can view and manage Procurement department tickets
+
+#### Legal Department Manager
+- **Email**: `legal.manager@smartclaim.com`
+- **Password**: `Legal@2025`
+- **Role**: Department Manager
+- **Department**: Legal
+- **Permissions**: Can view and manage Legal department tickets
+
 ## Worker Accounts
 
 ### Existing Worker

@@ -19,7 +19,8 @@ export function TicketFilters() {
 
   const handleFilterChange = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (value) {
+    // Treat "all" as clearing the filter
+    if (value && value !== 'all') {
       params.set(key, value);
     } else {
       params.delete(key);
@@ -70,14 +71,14 @@ export function TicketFilters() {
         <div className="space-y-2">
           <Label htmlFor="status">Status</Label>
           <Select
-            defaultValue={searchParams.get('status') || ''}
+            defaultValue={searchParams.get('status') || 'all'}
             onValueChange={(value) => handleFilterChange('status', value)}
           >
             <SelectTrigger id="status">
               <SelectValue placeholder="All statuses" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All statuses</SelectItem>
+              <SelectItem value="all">All statuses</SelectItem>
               <SelectItem value="new">New</SelectItem>
               <SelectItem value="in_progress">In Progress</SelectItem>
               <SelectItem value="pending_review">Pending Review</SelectItem>
@@ -91,14 +92,14 @@ export function TicketFilters() {
         <div className="space-y-2">
           <Label htmlFor="category">Category</Label>
           <Select
-            defaultValue={searchParams.get('category') || ''}
+            defaultValue={searchParams.get('category') || 'all'}
             onValueChange={(value) => handleFilterChange('category', value)}
           >
             <SelectTrigger id="category">
               <SelectValue placeholder="All categories" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All categories</SelectItem>
+              <SelectItem value="all">All categories</SelectItem>
               <SelectItem value="safety">Safety</SelectItem>
               <SelectItem value="quality">Quality</SelectItem>
               <SelectItem value="maintenance">Maintenance</SelectItem>
@@ -113,14 +114,14 @@ export function TicketFilters() {
         <div className="space-y-2">
           <Label htmlFor="priority">Priority</Label>
           <Select
-            defaultValue={searchParams.get('priority') || ''}
+            defaultValue={searchParams.get('priority') || 'all'}
             onValueChange={(value) => handleFilterChange('priority', value)}
           >
             <SelectTrigger id="priority">
               <SelectValue placeholder="All priorities" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All priorities</SelectItem>
+              <SelectItem value="all">All priorities</SelectItem>
               <SelectItem value="low">Low</SelectItem>
               <SelectItem value="medium">Medium</SelectItem>
               <SelectItem value="high">High</SelectItem>

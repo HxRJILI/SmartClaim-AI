@@ -6,7 +6,6 @@ import { cookies } from 'next/headers';
 import type { Database } from '~/lib/database.types';
 import { DepartmentHeader } from './_components/department-header';
 import { DepartmentStats } from './_components/department-stats';
-import { DepartmentTicketsTable } from './_components/department-tickets-table';
 import { PerformanceCharts } from './_components/performance-charts';
 import { ChatAssistant } from './_components/chat-assistant';
 
@@ -182,8 +181,6 @@ export default async function DepartmentDashboardPage() {
       />
       
       <PerformanceCharts tickets={departmentData.tickets} />
-      
-      <DepartmentTicketsTable tickets={departmentData.tickets} />
       
       <ChatAssistant userId={user.id} departmentId={userProfile.department_id} />
     </div>

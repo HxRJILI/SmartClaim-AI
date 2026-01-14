@@ -33,6 +33,10 @@ const config = {
   experimental: {
     mdxRs: true,
     reactCompiler: ENABLE_REACT_COMPILER,
+    // Increase body size limit for Server Actions to support file uploads
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
     turbo: {
       resolveExtensions: ['.ts', '.tsx', '.js', '.jsx'],
     },

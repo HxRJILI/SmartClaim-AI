@@ -12,9 +12,10 @@ interface VoiceRecorderProps {
 
 export function VoiceRecorder({ onRecordingComplete }: VoiceRecorderProps) {
   const [isRecording, setIsRecording] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
-
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const startRecording = async () => {
     try {
@@ -33,10 +34,18 @@ export function VoiceRecorder({ onRecordingComplete }: VoiceRecorderProps) {
         const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
         onRecordingComplete(blob);
         stream.getTracks().forEach(track => track.stop());
+        if (timerRef.current) clearInterval(timerRef.current);
+        setRecordingTime(0);
       };
 
       mediaRecorder.start();
       setIsRecording(true);
+      
+      // Start timer
+      timerRef.current = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+      
     } catch (error) {
       toast.error('Failed to access microphone');
     }
@@ -46,7 +55,14 @@ export function VoiceRecorder({ onRecordingComplete }: VoiceRecorderProps) {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
+      if (timerRef.current) clearInterval(timerRef.current);
     }
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   return (
@@ -55,11 +71,12 @@ export function VoiceRecorder({ onRecordingComplete }: VoiceRecorderProps) {
       variant={isRecording ? 'destructive' : 'outline'}
       size="sm"
       onClick={isRecording ? stopRecording : startRecording}
+      className={isRecording ? 'animate-pulse' : ''}
     >
       {isRecording ? (
         <>
-          <StopCircleIcon className="h-4 w-4 mr-2 animate-pulse" />
-          Stop Recording
+          <StopCircleIcon className="h-4 w-4 mr-2" />
+          Recording {formatTime(recordingTime)}
         </>
       ) : (
         <>

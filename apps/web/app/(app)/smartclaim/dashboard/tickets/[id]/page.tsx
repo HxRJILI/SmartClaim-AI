@@ -11,6 +11,7 @@ import { Badge } from '@kit/ui/badge';
 import { TicketComments } from './_components/ticket-comments';
 import { CommentForm } from './_components/comment-form';
 import { formatDistanceToNow } from 'date-fns';
+import { TipsDisplayWrapper } from './_components/tips-display-wrapper';
 
 export const metadata = {
   title: 'Ticket Details - SmartClaim',
@@ -124,6 +125,17 @@ export default async function WorkerTicketDetailPage({
           </div>
           <h2 className="text-xl text-muted-foreground">{ticket.title}</h2>
         </div>
+
+        {/* Safety Tips for High Priority Tickets */}
+        {['high', 'critical'].includes(ticket.priority) && (
+          <TipsDisplayWrapper 
+            ticketId={ticket.id}
+            priority={ticket.priority}
+            category={ticket.category}
+            title={ticket.title}
+            description={ticket.description}
+          />
+        )}
 
         {/* Ticket Details */}
         <div className="bg-card p-6 rounded-lg border space-y-4">

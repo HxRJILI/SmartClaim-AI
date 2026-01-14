@@ -2,9 +2,10 @@
 'use client';
 
 import { Button } from '@kit/ui/button';
-import { ArrowLeftIcon, SettingsIcon } from 'lucide-react';
+import { ArrowLeftIcon, SettingsIcon, Ticket } from 'lucide-react';
 import Link from 'next/link';
 import { SignOutButton } from '../../_components/sign-out-button';
+import { NotificationBell } from '../../dashboard/_components/notification-bell';
 
 interface DepartmentHeaderProps {
   department: any;
@@ -20,17 +21,21 @@ export function DepartmentHeader({ department }: DepartmentHeaderProps) {
         </p>
       </div>
       
-      <div className="flex gap-3">
+      <div className="flex gap-3 items-center">
+        <NotificationBell />
+        
+        <Button asChild variant="outline">
+          <Link href="/smartclaim/department/tickets">
+            <Ticket className="mr-2 h-4 w-4" />
+            Manage Tickets
+          </Link>
+        </Button>
+        
         <Button asChild variant="outline">
           <Link href="/smartclaim/dashboard">
             <ArrowLeftIcon className="mr-2 h-4 w-4" />
             Back to Dashboard
           </Link>
-        </Button>
-        
-        <Button variant="outline">
-          <SettingsIcon className="h-4 w-4 mr-2" />
-          Settings
         </Button>
         
         <SignOutButton />

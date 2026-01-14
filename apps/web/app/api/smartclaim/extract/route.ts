@@ -26,23 +26,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Convert file to buffer for processing
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    // TODO: Call your Python extractor.py script
-    // This is a placeholder - you'll need to implement the actual API call
-    // to your Python microservice
+    // Create FormData with the file for the Python extractor service
+    const extractorFormData = new FormData();
+    extractorFormData.append('file', file);
     
-    // Example: Using a Python microservice endpoint
+    // Call Python extractor microservice
     const extractorResponse = await fetch('http://localhost:8000/extract', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/octet-stream',
-        'X-File-Name': file.name,
-        'X-File-Type': file.type,
-      },
-      body: buffer,
+      body: extractorFormData,
     });
 
     if (!extractorResponse.ok) {

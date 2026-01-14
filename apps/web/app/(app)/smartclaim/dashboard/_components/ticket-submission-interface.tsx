@@ -91,31 +91,55 @@ export function TicketSubmissionInterface({ userId }: TicketSubmissionInterfaceP
               className="resize-none"
             />
 
-            <div className="flex items-center gap-3">
-              <FileUpload files={files} onChange={setFiles} />
-              <VoiceRecorder onRecordingComplete={setVoiceBlob} />
-              
-              <Button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="ml-auto"
-              >
-                <SendIcon className="mr-2 h-4 w-4" />
-                {isSubmitting ? 'Submitting...' : 'Submit'}
-              </Button>
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <FileUpload files={files} onChange={setFiles} />
+                <VoiceRecorder onRecordingComplete={setVoiceBlob} />
+                
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="ml-auto"
+                >
+                  <SendIcon className="mr-2 h-4 w-4" />
+                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                </Button>
+              </div>
+
+              {voiceBlob && (
+                <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
+                  <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
+                    <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+                    <span className="text-sm font-medium">Voice Recording Attached</span>
+                    <span className="text-xs opacity-70">({Math.round(voiceBlob.size / 1024)} KB)</span>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setVoiceBlob(null)}
+                    className="h-8 w-8 p-0 hover:bg-blue-100 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300"
+                  >
+                    <span className="sr-only">Remove recording</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-4 w-4"
+                    >
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" />
+                    </svg>
+                  </Button>
+                </div>
+              )}
             </div>
-
-            {files.length > 0 && (
-              <div className="text-sm text-muted-foreground">
-                {files.length} file(s) attached
-              </div>
-            )}
-
-            {voiceBlob && (
-              <div className="text-sm text-muted-foreground">
-                Voice recording attached
-              </div>
-            )}
           </div>
         )}
       </CardContent>

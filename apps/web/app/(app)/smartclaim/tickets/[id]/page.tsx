@@ -6,6 +6,7 @@ import { TicketDetails } from './_components/ticket-details';
 import { TicketTimeline } from './_components/ticket-timeline';
 import { TicketAttachments } from './_components/ticket-attachments';
 import { AddComment } from './_components/add-comment';
+import { ResolutionReportView } from './_components/resolution-report-view';
 
 async function getTicket(ticketId: string, userId: string) {
   const supabase = getSupabaseServerClient();
@@ -145,6 +146,13 @@ export default async function TicketDetailPage({
           {ticket.attachments && ticket.attachments.length > 0 && (
             <TicketAttachments attachments={ticket.attachments} />
           )}
+          
+          {/* Resolution Report (read-only for workers) */}
+          <ResolutionReportView
+            report={(ticket as any).resolution_report}
+            attachments={(ticket as any).resolution_attachments}
+            ticketStatus={ticket.status}
+          />
           
           <AddComment ticketId={ticket.id} userId={user.id} />
         </div>

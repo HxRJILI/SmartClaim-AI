@@ -9,6 +9,7 @@ import { TicketDetails } from './_components/ticket-details';
 import { TicketStatusUpdate } from './_components/ticket-status-update';
 import { TicketComments } from './_components/ticket-comments';
 import { CommentForm } from './_components/comment-form';
+import { ResolutionReport } from './_components/resolution-report';
 
 export const metadata = {
   title: 'Ticket Details - SmartClaim',
@@ -130,6 +131,14 @@ export default async function TicketDetailPage({
               ...creator,
               department_name: creatorDepartment
             }}
+          />
+          
+          {/* Resolution Report Section */}
+          <ResolutionReport
+            ticketId={ticket.id}
+            currentReport={ticket.resolution_report}
+            currentAttachments={ticket.resolution_attachments}
+            ticketStatus={ticket.status}
           />
           
           <div className="bg-card p-6 rounded-lg border">

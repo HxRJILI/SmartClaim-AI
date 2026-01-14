@@ -21,6 +21,12 @@ const ACCEPTED_FILE_TYPES = [
   '.pptx',
   '.md',
   '.txt',
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.tiff',
+  '.bmp',
+  '.webp'
 ];
 
 export function FileUpload({ files, onChange }: FileUploadProps) {

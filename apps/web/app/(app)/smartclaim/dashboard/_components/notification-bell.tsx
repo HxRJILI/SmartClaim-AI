@@ -8,6 +8,7 @@ import {
   getUnreadNotifications,
   markNotificationAsRead,
   markAllNotificationsAsRead,
+  getUserRole,
 } from '../_lib/notifications-actions';
 import {
   DropdownMenu,
@@ -33,10 +34,12 @@ export function NotificationBell() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     loadNotifications();
+    loadUserRole();
     // Poll for new notifications every 30 seconds
     const interval = setInterval(loadNotifications, 30000);
     return () => clearInterval(interval);
@@ -52,11 +55,30 @@ export function NotificationBell() {
     }
   };
 
+  const loadUserRole = async () => {
+    try {
+      const role = await getUserRole();
+      setUserRole(role);
+    } catch (error) {
+      console.error('Error loading user role:', error);
+    }
+  };
+
+  const getTicketUrl = (ticketId: string) => {
+    // Route to appropriate page based on user role
+    if (userRole === 'department_manager') {
+      return `/smartclaim/department/tickets/${ticketId}`;
+    } else if (userRole === 'admin') {
+      return `/smartclaim/admin/tickets/${ticketId}`;
+    }
+    return `/smartclaim/tickets/${ticketId}`;
+  };
+
   const handleNotificationClick = async (notification: Notification) => {
     try {
       await markNotificationAsRead(notification.id);
       setIsOpen(false);
-      router.push(`/smartclaim/tickets/${notification.ticket_id}`);
+      router.push(getTicketUrl(notification.ticket_id));
       await loadNotifications();
     } catch (error) {
       console.error('Error marking notification as read:', error);
