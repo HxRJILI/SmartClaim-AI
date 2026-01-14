@@ -5,7 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@kit/supabase/server-client';
 
-const CHAT_SERVICE_URL = process.env.CHAT_SERVICE_URL || 'http://localhost:8004';
+const CHAT_SERVICE_URL = process.env.CHAT_SERVICE_URL || 'http://localhost:8002';
 
 // POST - Generate safety tips for a high-priority ticket
 export async function POST(request: NextRequest) {
@@ -68,7 +68,9 @@ Format your response as a clear, numbered list of actionable tips. Be concise bu
       });
 
       if (!chatResponse.ok) {
-        throw new Error('Failed to generate tips from LLM');
+        const errorText = await chatResponse.text();
+        console.error('Chat service error:', chatResponse.status, errorText);
+        throw new Error(`Failed to generate tips from LLM: ${chatResponse.status}`);
       }
 
       const chatData = await chatResponse.json();
