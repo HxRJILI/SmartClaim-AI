@@ -4,6 +4,7 @@
  * React hook for interacting with the Vision Language Model (LVM) service.
  * Provides image analysis capabilities for the SmartClaim frontend.
  */
+'use client';
 
 import { useState, useCallback } from 'react';
 
@@ -125,7 +126,7 @@ export function useLVM(): UseLVMReturn {
     imageUrl: string,
     metadata?: LVMImageMetadata
   ): Promise<LVMAnalysisResult | null> => {
-    setState(prev => ({ ...prev, isAnalyzing: true, error: null }));
+    setState((prev: UseLVMState) => ({ ...prev, isAnalyzing: true, error: null }));
 
     try {
       const response = await fetch('/api/smartclaim/lvm/analyze', {
@@ -146,7 +147,7 @@ export function useLVM(): UseLVMReturn {
 
       const result: LVMAnalysisResult = await response.json();
       
-      setState(prev => ({
+      setState((prev: UseLVMState) => ({
         ...prev,
         isAnalyzing: false,
         result,
@@ -157,7 +158,7 @@ export function useLVM(): UseLVMReturn {
       
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Analysis failed';
-      setState(prev => ({
+      setState((prev: UseLVMState) => ({
         ...prev,
         isAnalyzing: false,
         error: errorMessage,
@@ -175,7 +176,7 @@ export function useLVM(): UseLVMReturn {
   ): Promise<LVMAnalysisResult | null> => {
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      setState(prev => ({
+      setState((prev: UseLVMState) => ({
         ...prev,
         error: 'Invalid file type. Please provide an image file.',
       }));
@@ -185,7 +186,7 @@ export function useLVM(): UseLVMReturn {
     // Validate file size (max 10MB)
     const maxSize = 10 * 1024 * 1024;
     if (file.size > maxSize) {
-      setState(prev => ({
+      setState((prev: UseLVMState) => ({
         ...prev,
         error: 'File too large. Maximum size is 10MB.',
       }));
@@ -204,7 +205,7 @@ export function useLVM(): UseLVMReturn {
       
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to process image file';
-      setState(prev => ({
+      setState((prev: UseLVMState) => ({
         ...prev,
         error: errorMessage,
       }));

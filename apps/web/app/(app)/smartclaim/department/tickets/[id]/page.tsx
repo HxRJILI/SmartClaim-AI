@@ -42,8 +42,9 @@ async function getSmartClaimSupabaseClient() {
 export default async function TicketDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const resolvedParams = await params;
   const supabase = await getSmartClaimSupabaseClient();
   
   const { data: { user } } = await supabase.auth.getUser();
@@ -67,7 +68,7 @@ export default async function TicketDetailPage({
   const { data: ticket } = await supabase
     .from('tickets')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', resolvedParams.id)
     .single();
 
   if (!ticket) {

@@ -22,20 +22,21 @@ async function getDashboardData(userId: string) {
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error fetching tickets:', error);
-    return null;
+    console.error('Error fetching tickets:', error.message || error.code || JSON.stringify(error));
+    // Return empty data instead of null to prevent crashes
+    return { tickets: [], stats: { total: 0, new: 0, in_progress: 0, resolved: 0, closed: 0 } };
   }
 
   // Calculate stats
   const stats = {
-    total: tickets.length,
-    new: tickets.filter(t => t.status === 'new').length,
-    in_progress: tickets.filter(t => t.status === 'in_progress').length,
-    resolved: tickets.filter(t => t.status === 'resolved').length,
-    closed: tickets.filter(t => t.status === 'closed').length,
+    total: tickets?.length || 0,
+    new: tickets?.filter(t => t.status === 'new').length || 0,
+    in_progress: tickets?.filter(t => t.status === 'in_progress').length || 0,
+    resolved: tickets?.filter(t => t.status === 'resolved').length || 0,
+    closed: tickets?.filter(t => t.status === 'closed').length || 0,
   };
 
-  return { tickets, stats };
+  return { tickets: tickets || [], stats };
 }
 
 async function getUserProfile(userId: string) {

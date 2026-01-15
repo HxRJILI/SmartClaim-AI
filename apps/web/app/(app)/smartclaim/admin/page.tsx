@@ -5,11 +5,7 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import type { Database } from '~/lib/database.types';
 import { AdminHeader } from './_components/admin-header';
-import { GlobalStats } from './_components/global-stats';
-import { DepartmentComparison } from './_components/department-comparison';
-import { IndustrialKPIs } from './_components/industrial-kpis';
-import { SystemConfiguration } from './_components/system-configuration';
-import { ChatAssistant } from './_components/chat-assistant';
+import { AdminTabs } from './_components/admin-tabs';
 
 export const metadata = {
   title: 'Admin Dashboard - SmartClaim',
@@ -45,6 +41,8 @@ async function getSmartClaimSupabaseClient() {
 
 async function getGlobalData() {
   const supabase = await getSmartClaimSupabaseClient();
+
+  // Get all tickets
 
   // Get all tickets
   const { data: tickets, error: ticketsError } = await supabase
@@ -108,10 +106,14 @@ async function getGlobalData() {
     };
   }));
 
-  // Get user statistics
+  // Get user statistics with full details
   const { data: users } = await supabase
     .from('user_profiles')
-    .select('id, role, department_id');
+    .select(`
+      *,
+      department:departments(id, name)
+    `)
+    .order('created_at', { ascending: false });
 
   // Calculate global stats
   const now = new Date();
@@ -144,10 +146,11 @@ async function getGlobalData() {
     avgResolutionTime = totalTime / resolvedTickets.length / (1000 * 60 * 60); // Hours
   }
 
-  // Department performance
+  // Department performance with user count
   const departmentPerformance = departmentsWithManagers?.map(dept => {
     const deptTickets = ticketsWithDept?.filter(t => t.assigned_to_department === dept.id) || [];
     const deptResolved = deptTickets.filter(t => t.resolved_at);
+    const deptUsers = users?.filter(u => u.department_id === dept.id) || [];
     
     let deptAvgTime = 0;
     if (deptResolved.length > 0) {
@@ -168,6 +171,8 @@ async function getGlobalData() {
       resolution_rate: deptTickets.length > 0 
         ? (deptResolved.length / deptTickets.length) * 100 
         : 0,
+      user_count: deptUsers.length,
+      ticket_count: deptTickets.length,
     };
   }) || [];
 
@@ -175,6 +180,7 @@ async function getGlobalData() {
     stats,
     tickets: ticketsWithDept || [],
     departments: departmentPerformance,
+    users: users || [],
     avgResolutionTime,
   };
 }
@@ -212,19 +218,14 @@ export default async function AdminDashboardPage() {
     <div className="container mx-auto p-6 space-y-6">
       <AdminHeader />
       
-      <GlobalStats 
+      <AdminTabs
         stats={globalData.stats}
         avgResolutionTime={globalData.avgResolutionTime}
+        tickets={globalData.tickets}
+        departments={globalData.departments}
+        users={globalData.users}
+        userId={user.id}
       />
-      
-      <DepartmentComparison departments={globalData.departments} />
-      
-      <IndustrialKPIs tickets={globalData.tickets} />
-      
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <SystemConfiguration />
-        <ChatAssistant userId={user.id} />
-      </div>
     </div>
   );
 }

@@ -31,6 +31,10 @@ services:
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY:-AIzaSyBkuu6HZHTrMqtni0rsqepjhyyppu5Oh1U}
       - LOG_LEVEL=info
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+      - 1.1.1.1
     volumes:
       - ./classifier:/app
     restart: unless-stopped
@@ -92,6 +96,10 @@ services:
       - LVM_PORT=8005
       - LVM_TIMEOUT=60
       - LOG_LEVEL=info
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+      - 1.1.1.1
     volumes:
       - ./lvm:/app
     restart: unless-stopped

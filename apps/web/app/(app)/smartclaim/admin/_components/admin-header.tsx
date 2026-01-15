@@ -2,7 +2,7 @@
 'use client';
 
 import { Button } from '@kit/ui/button';
-import { ArrowLeftIcon, SettingsIcon, UsersIcon, BuildingIcon } from 'lucide-react';
+import { ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
 import { SignOutButton } from '../../_components/sign-out-button';
 
@@ -22,21 +22,6 @@ export function AdminHeader() {
             <ArrowLeftIcon className="mr-2 h-4 w-4" />
             Back to Dashboard
           </Link>
-        </Button>
-        
-        <Button variant="outline">
-          <UsersIcon className="h-4 w-4 mr-2" />
-          Manage Users
-        </Button>
-        
-        <Button variant="outline">
-          <BuildingIcon className="h-4 w-4 mr-2" />
-          Manage Departments
-        </Button>
-        
-        <Button variant="outline">
-          <SettingsIcon className="h-4 w-4 mr-2" />
-          Settings
         </Button>
         
         <SignOutButton />

@@ -11,15 +11,17 @@ interface ChatAssistantProps {
 
 export function ChatAssistant({ userId }: ChatAssistantProps) {
   return (
-    <Card>
+    <Card className="min-h-[600px] flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <BotIcon className="h-5 w-5" />
           Admin Assistant
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <ChatInterface userId={userId} />
+      <CardContent className="flex-1 flex flex-col">
+        <div className="flex-1 min-h-[500px]">
+          <ChatInterface userId={userId} />
+        </div>
       </CardContent>
     </Card>
   );
