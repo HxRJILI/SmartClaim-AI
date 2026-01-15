@@ -1,21 +1,245 @@
-MIT License
+SMARTCLAIM AI - PROPRIETARY SOFTWARE LICENSE AGREEMENT
+======================================================
 
-Copyright (c) 2024 MakerKit
+Version 1.0 | Effective Date: January 15, 2026
+Copyright (c) 2025-2026 SmartClaim AI Development Team. All Rights Reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+IMPORTANT: READ THIS LICENSE AGREEMENT CAREFULLY BEFORE ACCESSING, DOWNLOADING,
+INSTALLING, COPYING, OR USING THIS SOFTWARE.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+================================================================================
+                           NOTICE OF PROPRIETARY RIGHTS
+================================================================================
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+This software, including but not limited to all source code, object code,
+algorithms, documentation, designs, user interfaces, graphics, databases,
+configurations, and any associated materials (collectively, the "Software"),
+is the EXCLUSIVE PROPERTY of the SmartClaim AI Development Team (the "Owner").
+
+================================================================================
+                            LICENSE RESTRICTIONS
+================================================================================
+
+BY ACCESSING, VIEWING, OR OBTAINING A COPY OF THIS SOFTWARE, YOU ACKNOWLEDGE
+AND AGREE TO THE FOLLOWING TERMS:
+
+1. NO LICENSE GRANTED
+   -----------------
+   This document does NOT grant you any license, right, title, or interest in
+   or to the Software. No implied licenses are granted under this agreement.
+   
+   Specifically, you are NOT granted permission to:
+   
+   a) USE the Software for any purpose whatsoever, including but not limited
+      to personal, educational, non-commercial, or commercial purposes;
+   
+   b) COPY, reproduce, duplicate, or create copies of the Software in any
+      form, whether electronic, printed, or otherwise;
+   
+   c) MODIFY, adapt, alter, translate, enhance, or create derivative works
+      based on the Software;
+   
+   d) DISTRIBUTE, publish, share, transmit, sublicense, sell, lease, rent,
+      loan, or transfer the Software to any third party;
+   
+   e) REVERSE ENGINEER, decompile, disassemble, or attempt to derive the
+      source code, algorithms, data structures, or underlying ideas from
+      the Software;
+   
+   f) REMOVE, alter, or obscure any proprietary notices, labels, trademarks,
+      or copyright notices from the Software;
+   
+   g) DEPLOY, host, or run the Software on any server, cloud platform,
+      container, or computing infrastructure;
+   
+   h) INTEGRATE the Software with any other software, system, or service;
+   
+   i) USE any portion of the Software's architecture, design patterns,
+      algorithms, or methodologies in other projects;
+   
+   j) TRAIN machine learning models using the Software or its outputs;
+   
+   k) ACCESS or use any APIs, services, or endpoints provided by the Software.
+
+2. VIEWING ONLY
+   ------------
+   The only permitted activity is VIEWING the source code on authorized
+   platforms (e.g., GitHub) solely for the purpose of:
+   
+   - Evaluating a potential licensing agreement with the Owner
+   - Academic review with prior written consent from the Owner
+   - Security research with prior written consent from the Owner
+   
+   Any other viewing or access is expressly prohibited.
+
+3. AUTHORIZED USE
+   --------------
+   Use of this Software requires a SEPARATE WRITTEN LICENSE AGREEMENT signed
+   by an authorized representative of the Owner. Unauthorized use constitutes
+   copyright infringement and may result in civil and criminal penalties.
+
+================================================================================
+                          INTELLECTUAL PROPERTY RIGHTS
+================================================================================
+
+4. OWNERSHIP
+   ---------
+   The Software is protected by copyright laws, international copyright
+   treaties, trade secret laws, patent laws, and other intellectual property
+   laws and treaties. The Owner retains all right, title, and interest in and
+   to the Software, including all intellectual property rights therein.
+
+5. TRADEMARKS
+   ----------
+   "SmartClaim AI," the SmartClaim AI logo, and all related names, logos,
+   product and service names, designs, and slogans are trademarks of the
+   Owner. You may not use such marks without the prior written permission
+   of the Owner.
+
+6. PATENTS
+   -------
+   The Software may be protected by one or more patents or pending patent
+   applications. Nothing in this agreement grants any patent license.
+
+================================================================================
+                              CONFIDENTIALITY
+================================================================================
+
+7. CONFIDENTIAL INFORMATION
+   ------------------------
+   The Software constitutes confidential and proprietary information of the
+   Owner. You agree to:
+   
+   a) Maintain the confidentiality of the Software;
+   b) Not disclose any information about the Software's implementation,
+      architecture, or functionality to any third party;
+   c) Notify the Owner immediately if you become aware of any unauthorized
+      access, use, or disclosure of the Software.
+
+================================================================================
+                          DISCLAIMER OF WARRANTIES
+================================================================================
+
+8. AS-IS BASIS
+   -----------
+   THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF
+   ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+   OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND
+   NON-INFRINGEMENT.
+   
+   THE OWNER DOES NOT WARRANT THAT:
+   a) The Software will meet any requirements;
+   b) The Software will be uninterrupted, timely, secure, or error-free;
+   c) Any errors in the Software will be corrected;
+   d) The Software is free of viruses or other harmful components.
+
+================================================================================
+                          LIMITATION OF LIABILITY
+================================================================================
+
+9. NO LIABILITY
+   ------------
+   IN NO EVENT SHALL THE OWNER BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+   SPECIAL, EXEMPLARY, CONSEQUENTIAL, OR PUNITIVE DAMAGES (INCLUDING BUT NOT
+   LIMITED TO PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, LOSS OF USE, DATA,
+   OR PROFITS, BUSINESS INTERRUPTION, OR ANY OTHER COMMERCIAL DAMAGES OR
+   LOSSES) ARISING OUT OF OR IN CONNECTION WITH THIS AGREEMENT OR THE SOFTWARE,
+   HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE), EVEN IF THE OWNER
+   HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+================================================================================
+                              INDEMNIFICATION
+================================================================================
+
+10. INDEMNITY
+    ---------
+    You agree to indemnify, defend, and hold harmless the Owner and its
+    officers, directors, employees, agents, licensors, and suppliers from
+    and against any claims, liabilities, damages, judgments, awards, losses,
+    costs, expenses, or fees (including reasonable attorneys' fees) arising
+    out of or relating to your violation of this agreement or your use of
+    the Software.
+
+================================================================================
+                              ENFORCEMENT
+================================================================================
+
+11. VIOLATION CONSEQUENCES
+    ----------------------
+    Any violation of this license agreement may result in:
+    
+    a) Immediate legal action seeking injunctive relief;
+    b) Civil lawsuits for damages, including statutory damages;
+    c) Criminal prosecution for willful copyright infringement;
+    d) Recovery of attorneys' fees and costs;
+    e) Disgorgement of any profits derived from unauthorized use;
+    f) Reporting to relevant authorities and professional organizations.
+
+12. INJUNCTIVE RELIEF
+    -----------------
+    You acknowledge that any breach of this agreement would cause irreparable
+    harm to the Owner for which monetary damages would be inadequate, and
+    that the Owner shall be entitled to seek equitable relief, including
+    injunction and specific performance, in addition to any other remedies
+    available at law or in equity.
+
+================================================================================
+                              GENERAL PROVISIONS
+================================================================================
+
+13. GOVERNING LAW
+    -------------
+    This agreement shall be governed by and construed in accordance with the
+    laws of the applicable jurisdiction, without regard to its conflict of
+    law provisions.
+
+14. SEVERABILITY
+    ------------
+    If any provision of this agreement is held to be invalid or unenforceable,
+    such provision shall be struck and the remaining provisions shall be
+    enforced to the fullest extent under law.
+
+15. ENTIRE AGREEMENT
+    ----------------
+    This agreement constitutes the entire agreement between you and the Owner
+    regarding the Software and supersedes all prior or contemporaneous
+    understandings regarding such subject matter.
+
+16. WAIVER
+    ------
+    No waiver of any term of this agreement shall be deemed a further or
+    continuing waiver of such term or any other term, and the Owner's failure
+    to assert any right or provision under this agreement shall not constitute
+    a waiver of such right or provision.
+
+17. AMENDMENTS
+    ----------
+    The Owner reserves the right to modify this agreement at any time. Any
+    changes will be effective immediately upon posting. Your continued access
+    to the Software after any changes constitutes acceptance of the new terms.
+
+================================================================================
+                              CONTACT INFORMATION
+================================================================================
+
+For licensing inquiries, authorization requests, or legal matters:
+
+SmartClaim AI Development Team
+Email: contact@smartclaim.ai
+GitHub: https://github.com/WE2722 or https://github.com/HxRjili
+
+================================================================================
+
+BY ACCESSING THIS SOFTWARE, YOU ACKNOWLEDGE THAT YOU HAVE READ THIS AGREEMENT,
+UNDERSTAND IT, AND AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS.
+
+IF YOU DO NOT AGREE TO THESE TERMS, DO NOT ACCESS, DOWNLOAD, INSTALL, COPY,
+OR USE THE SOFTWARE IN ANY WAY.
+
+================================================================================
+
+                    Copyright (c) 2025-2026 SmartClaim AI
+                          ALL RIGHTS RESERVED
+
+================================================================================

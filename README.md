@@ -1,343 +1,329 @@
-![Makerkit - Next.js Supabase SaaS Starter Kit \[Lite version\]](apps/web/public/images/makerkit.webp)
+<p align="center">
+  <img src="docs/assets/smartclaim-banner.png" alt="SmartClaim AI Banner" width="800"/>
+</p>
 
-# NEW! Next.js Supabase SaaS Starter Kit (Lite)
+<h1 align="center">🏭 SmartClaim AI</h1>
 
-Start building your SaaS faster with our Next.js 15 + Supabase starter kit.
+<p align="center">
+  <strong>Enterprise-Grade Multimodal AI Platform for Industrial Incident Management</strong>
+</p>
 
-👉 **Looking for a full-featured SaaS Starter Kit?** [Check out the complete version](https://makerkit.dev)
+<p align="center">
+  <a href="#-features">Features</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-documentation">Documentation</a> •
+  <a href="#-license">License</a>
+</p>
 
-⭐️ **Why Developers Trust Makerkit:**
-- Production-grade architecture decisions
-- Comprehensive TypeScript setup
-- Modern stack: Next.js 15, Supabase, TailwindCSS v4
-- Quality Code tooling: ESLint v9, Prettier, strict TypeScript, etc.
-- Regular updates and active maintenance
+<p align="center">
+  <img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="Version"/>
+  <img src="https://img.shields.io/badge/python-3.11+-green.svg" alt="Python"/>
+  <img src="https://img.shields.io/badge/Next.js-15.x-black.svg" alt="Next.js"/>
+  <img src="https://img.shields.io/badge/license-Proprietary-red.svg" alt="License"/>
+  <img src="https://img.shields.io/badge/status-Production-success.svg" alt="Status"/>
+</p>
 
-PS: the documentation for this kit is still being updated, so please check back later for more details.
+---
 
-## What's Included
+## 📋 Overview
 
-### Core Architecture
-- 🏗️ Next.js 15 + Turborepo monorepo setup
-- 🎨 Shadcn UI components with TailwindCSS v4
-- 🔐 Supabase authentication & basic DB
-- 🌐 i18n translations (client + server)
-- ✨ Full TypeScript + ESLint v9 + Prettier configuration
+**SmartClaim AI** is a comprehensive, enterprise-grade platform designed for managing workplace non-conformities, incidents, and claims in industrial environments. The system leverages cutting-edge multimodal AI to process text, images, audio, and documents, providing intelligent classification, risk assessment, and predictive SLA management.
 
-### Key Features
-- 👤 User authentication flow
-- ⚙️ User profile & settings
-- 📱 Responsive marketing pages
-- 🔒 Protected routes
-- 🎯 Basic test setup with Playwright
+### 🎯 Key Capabilities
 
-### Technologies
+- **Multimodal Input Processing**: Accept and analyze text descriptions, images, voice recordings, and documents
+- **AI-Powered Classification**: Automatic categorization with confidence scoring and human review flagging
+- **Visual Evidence Analysis**: Industrial scene understanding using Vision Language Models (VLM)
+- **Predictive SLA Engine**: Hybrid rule-based + ML approach for accurate resolution time prediction
+- **Multi-Tenant RAG System**: Role-based context retrieval with strict data isolation
+- **Real-Time Dashboard**: Live monitoring with department-specific views and analytics
 
-This starter kit provides core foundations:
+---
 
-🛠️ **Technology Stack**:
-- [Next.js 15](https://nextjs.org/): A React-based framework for server-side rendering and static site generation.
-- [Tailwind CSS](https://tailwindcss.com/): A utility-first CSS framework for rapidly building custom designs.
-- [Supabase](https://supabase.com/): A realtime database for web and mobile applications.
-- [i18next](https://www.i18next.com/): A popular internationalization framework for JavaScript.
-- [Turborepo](https://turborepo.org/): A monorepo tool for managing multiple packages and applications.
-- [Shadcn UI](https://shadcn.com/): A collection of components built using Tailwind CSS.
-- [Zod](https://github.com/colinhacks/zod): A TypeScript-first schema validation library.
-- [React Query](https://tanstack.com/query/v4): A powerful data fetching and caching library for React.
-- [Prettier](https://prettier.io/): An opinionated code formatter for JavaScript, TypeScript, and CSS.
-- [Eslint](https://eslint.org/): A powerful linting tool for JavaScript and TypeScript.
-- [Playwright](https://playwright.dev/): A framework for end-to-end testing of web applications.
+## ✨ Features
 
-This kit is a trimmed down version of the [full version of this SaaS Starter Kit](https://makerkit.dev). It is a good way to evaluate small part of the full kit, or to simply use it as a base for your own project.
+### 🤖 AI Microservices Architecture
 
-## Comparing Lite vs Full Version
+| Service | Port | Technology | Description |
+|---------|------|------------|-------------|
+| **Extractor** | 8000 | PaddleOCR | Multi-format document text extraction with OCR |
+| **Classifier** | 8001 | Gemini 2.5 Flash | Intelligent ticket classification (6 categories, 4 priorities) |
+| **Transcriber** | 8002 | Whisper + VOSK | Two-stage ASR pipeline for voice transcription |
+| **Chat Assistant** | 8003 | Gemini + RAG | Context-aware conversational AI |
+| **RAG Service** | 8004 | Qdrant + Embeddings | Multi-tenant vector search with role-based filtering |
+| **LVM Analyzer** | 8005 | Qwen 2.5 VL 7B | Industrial image analysis and visual evidence extraction |
+| **Aggregator** | 8006 | Python | Multimodal evidence fusion with weighted voting |
+| **SLA Predictor** | 8007 | Hybrid ML/Rules | Breach probability and resolution time prediction |
 
-The lite kit is perfect for:
-- Evaluating our code architecture and patterns
-- Building basic SaaS prototypes
-- Learning our tech stack approach
-- Building a basic SaaS tool
+### 🔐 Role-Based Access Control
 
-The [full version](https://makerkit.dev) adds production features:
-- 💳 Complete billing and subscription system
-- 👥 Team accounts and management
-- 📧 Mailers and Email Templates (Nodemailer, Resend, etc.)
-- 📊 Analytics (GA, Posthog, Umami, etc.)
-- 🔦 Monitoring providers (Sentry, Baselime, etc.)
-- 🔐 Production database schema
-- ✅ Comprehensive test suite
-- 🔔 Realtime Notifications
-- 📝 Blogging system
-- 💡 Documentation system
-- ‍💻 Super Admin panel
-- 🕒 Daily updates and improvements
-- 🐛 Priority bug fixes
-- 🤝 Support
-- ⭐️ Used by 1000+ developers
-- 💪 Active community members
-- 🏢 Powers startups to enterprises
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        ADMIN                                     │
+│  • Full system access                                           │
+│  • Cross-department analytics                                   │
+│  • User & department management                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                   DEPARTMENT MANAGER                            │
+│  • Department-scoped ticket access                              │
+│  • Team performance monitoring                                  │
+│  • Ticket assignment & SLA tracking                             │
+├─────────────────────────────────────────────────────────────────┤
+│                        WORKER                                    │
+│  • Submit new tickets                                           │
+│  • View own ticket history                                      │
+│  • Chat assistant access                                        │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-[View complete feature comparison →](https://makerkit.dev/#pricing)
+### 📊 Classification Categories
 
-## Getting Started
+| Category | Description | Example Incidents |
+|----------|-------------|-------------------|
+| 🔴 **Safety** | Physical hazards, injuries, emergencies | Burns, falls, chemical exposure |
+| 🟠 **Quality** | Product defects, process deviations | Specification failures, defects |
+| 🔵 **Maintenance** | Equipment issues, facility repairs | Machine malfunctions, wear |
+| 🟢 **Logistics** | Supply chain, inventory problems | Delivery delays, shortages |
+| 🟣 **HR** | Employee relations, conduct issues | Policy violations, disputes |
+| ⚪ **Other** | Uncategorized issues | General inquiries |
+
+---
+
+## 🏗 Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              CLIENT LAYER                                    │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
+│  │   Web App   │  │ Mobile App  │  │     API     │  │   Webhooks  │        │
+│  │  (Next.js)  │  │  (Future)   │  │   Clients   │  │             │        │
+│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘        │
+└─────────┼────────────────┼────────────────┼────────────────┼────────────────┘
+          │                │                │                │
+          └────────────────┴────────────────┴────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           API GATEWAY LAYER                                  │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                    Next.js API Routes + Middleware                   │   │
+│  │              Authentication • Rate Limiting • Validation             │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+          ┌─────────────────────────┼─────────────────────────┐
+          │                         │                         │
+          ▼                         ▼                         ▼
+┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
+│   EXTRACTOR      │    │   TRANSCRIBER    │    │   LVM ANALYZER   │
+│   Port: 8000     │    │   Port: 8002     │    │   Port: 8005     │
+│   ─────────────  │    │   ─────────────  │    │   ─────────────  │
+│   • PaddleOCR    │    │   • VOSK         │    │   • Qwen 2.5 VL  │
+│   • PDF/DOCX     │    │   • Whisper      │    │   • OpenRouter   │
+│   • CSV/Excel    │    │   • Multi-lang   │    │   • Scene Det.   │
+└────────┬─────────┘    └────────┬─────────┘    └────────┬─────────┘
+         │                       │                       │
+         └───────────────────────┼───────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          AGGREGATOR SERVICE                                  │
+│                            Port: 8006                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │              Multimodal Evidence Fusion Engine                       │   │
+│  │         Weighted Voting • Confidence Calibration • Deduplication     │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                 │
+          ┌──────────────────────┼──────────────────────┐
+          │                      │                      │
+          ▼                      ▼                      ▼
+┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+│   CLASSIFIER     │  │   SLA PREDICTOR  │  │   RAG SERVICE    │
+│   Port: 8001     │  │   Port: 8007     │  │   Port: 8004     │
+│   ─────────────  │  │   ─────────────  │  │   ─────────────  │
+│   • Gemini 2.5   │  │   • Hybrid ML    │  │   • Qdrant       │
+│   • 6 Categories │  │   • Rule Engine  │  │   • Multi-tenant │
+│   • Bilingual    │  │   • Breach Risk  │  │   • Embeddings   │
+└────────┬─────────┘  └────────┬─────────┘  └────────┬─────────┘
+         │                     │                     │
+         └─────────────────────┼─────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           DATA LAYER                                         │
+│  ┌─────────────────────┐              ┌─────────────────────┐               │
+│  │   PostgreSQL        │              │   Qdrant Vector DB  │               │
+│  │   (Supabase)        │              │                     │               │
+│  │   ───────────────   │              │   ───────────────   │               │
+│  │   • Users/Roles     │              │   • Ticket Vectors  │               │
+│  │   • Tickets         │              │   • Semantic Search │               │
+│  │   • Departments     │              │   • Role Filtering  │               │
+│  │   • Audit Logs      │              │                     │               │
+│  └─────────────────────┘              └─────────────────────┘               │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🚀 Quick Start
+
+> ⚠️ **Important**: This software is proprietary and requires explicit authorization. See [LICENSE](LICENSE) for details.
 
 ### Prerequisites
 
-- Node.js 18.x or later (preferably the latest LTS version)
-- Docker
-- PNPM
-
-Please make sure you have a Docker daemon running on your machine. This is required for the Supabase CLI to work.
+- **Docker** & **Docker Compose** v2.0+
+- **Node.js** 20.x+ with **pnpm**
+- **Python** 3.11+
+- **Supabase** account (or local instance)
+- **API Keys**: Gemini API, OpenRouter API
 
 ### Installation
 
-#### 1. Clone this repository
+Please refer to the detailed [Installation Guide](INSTALLATION.md) for complete setup instructions.
 
 ```bash
-git clone https://github.com/makerkit/next-supabase-saas-kit-lite.git
+# Clone the repository (requires authorization)
+git clone https://github.com/WE2722/SmartClaim_AI.git
+cd SmartClaim_AI
+
+# See INSTALLATION.md for detailed setup steps
 ```
 
-#### 2. Install dependencies
+---
 
-```bash
-pnpm install
-```
+## 📚 Documentation
 
-#### 3. Start Supabase
+| Document | Description |
+|----------|-------------|
+| [📖 Installation Guide](INSTALLATION.md) | Complete setup and deployment instructions |
+| [📋 App Description](APP_DESCRIPTION.md) | Detailed feature documentation |
+| [🔧 API Reference](docs/api-reference.md) | REST API endpoints and schemas |
+| [🏗 Architecture](docs/architecture.md) | System design and component details |
 
-Please make sure you have a Docker daemon running on your machine.
+### Read the Docs
 
-Then run the following command to start Supabase:
+Full documentation is available at: **[smartclaim-ai.readthedocs.io](https://smartclaim-ai.readthedocs.io)**
 
-```bash
-pnpm run supabase:web:start
-```
+---
 
-Once the Supabase server is running, please access the Supabase Dashboard using the port in the output of the previous command. Normally, you find it at [http://localhost:54323](http://localhost:54323).
+## 🛠 Technology Stack
 
-You will also find all the Supabase services printed in the terminal after the command is executed.
+### Frontend
+- **Framework**: Next.js 15.x with App Router
+- **UI Library**: shadcn/ui + Radix UI
+- **Styling**: Tailwind CSS
+- **State Management**: TanStack Query
+- **Authentication**: Supabase Auth
 
-##### Stopping Supabase
+### Backend
+- **API Layer**: Next.js API Routes + FastAPI microservices
+- **Database**: PostgreSQL (Supabase)
+- **Vector Store**: Qdrant
+- **Caching**: Redis (optional)
 
-To stop the Supabase server, run the following command:
+### AI/ML
+- **LLM**: Google Gemini 2.5 Flash
+- **VLM**: Qwen 2.5 VL 7B (via OpenRouter)
+- **ASR**: Whisper + VOSK
+- **OCR**: PaddleOCR
+- **Embeddings**: all-MiniLM-L6-v2
 
-```bash
-pnpm run supabase:web:stop
-```
+### Infrastructure
+- **Containerization**: Docker + Docker Compose
+- **Orchestration**: Kubernetes (production)
+- **CI/CD**: GitHub Actions
+- **Monitoring**: Prometheus + Grafana
 
-##### Resetting Supabase
+---
 
-To reset the Supabase server, run the following command:
-
-```bash
-pnpm run supabase:web:reset
-```
-
-##### More Supabase Commands
-
-For more Supabase commands, see the [Supabase CLI documentation](https://supabase.com/docs/guides/cli).
-
-```
-# Create new migration
-pnpm --filter web supabase migration new <name>
-
-# Link to Supabase project
-pnpm --filter web supabase link
-
-# Push migrations
-pnpm --filter web supabase db push
-```
-
-#### 4. Start the Next.js application
-
-```bash
-pnpm run dev
-```
-
-The application will be available at http://localhost:3000.
-
-#### 5. Code Health (linting, formatting, etc.)
-
-To format your code, run the following command:
-
-```bash
-pnpm run format:fix
-```
-
-To lint your code, run the following command:
-
-```bash
-pnpm run lint
-```
-
-To validate your TypeScript code, run the following command:
-
-```bash
-pnpm run typecheck
-```
-
-Turborepo will cache the results of these commands, so you can run them as many times as you want without any performance impact.
-
-## Project Structure
-
-The project is organized into the following folders:
+## 📁 Project Structure
 
 ```
-apps/
-├── web/                  # Next.js application
-│   ├── app/             # App Router pages
-│   │   ├── (marketing)/ # Public marketing pages
-│   │   ├── auth/        # Authentication pages
-│   │   └── home/        # Protected app pages
-│   ├── supabase/        # Database & migrations
-│   └── config/          # App configuration
-│
-packages/
-├── ui/                  # Shared UI components
-└── features/           # Core feature packages
-    ├── auth/           # Authentication logic
-    └── ...
+SmartClaim_AI/
+├── apps/
+│   ├── web/                    # Next.js frontend application
+│   │   ├── app/               # App router pages
+│   │   ├── components/        # React components
+│   │   └── lib/               # Utilities and hooks
+│   └── e2e/                   # End-to-end tests
+├── packages/
+│   ├── features/              # Feature modules
+│   │   ├── smartclaim/        # Core SmartClaim features
+│   │   ├── auth/              # Authentication
+│   │   └── accounts/          # Account management
+│   ├── ui/                    # Shared UI components
+│   ├── supabase/              # Database client
+│   └── shared/                # Shared utilities
+├── python-services/           # AI microservices
+│   ├── extractor/             # Document extraction (8000)
+│   ├── classifier/            # Text classification (8001)
+│   ├── transcriber/           # Audio transcription (8002)
+│   ├── chat/                  # Chat assistant (8003)
+│   ├── rag/                   # RAG service (8004)
+│   ├── lvm/                   # Vision analysis (8005)
+│   ├── aggregator/            # Evidence fusion (8006)
+│   └── sla/                   # SLA prediction (8007)
+├── supabase/
+│   ├── migrations/            # Database migrations
+│   └── config.toml            # Supabase configuration
+├── docs/                      # Documentation
+└── docker-compose.yml         # Container orchestration
 ```
 
-For more information about this project structure, see the article [Next.js App Router: Project Structure](https://makerkit.dev/blog/tutorials/nextjs-app-router-project-structure).
+---
 
-### Environment Variables
+## 🔒 Security
 
-You can configure the application by setting environment variables in the `.env.local` file.
+SmartClaim AI implements enterprise-grade security:
 
-Here are the available variables:
+- **Authentication**: Supabase Auth with JWT tokens
+- **Authorization**: Row-Level Security (RLS) policies
+- **Data Isolation**: Multi-tenant architecture with strict boundaries
+- **Encryption**: TLS 1.3 for transit, AES-256 for storage
+- **Audit Logging**: Comprehensive activity tracking
+- **Input Validation**: Schema validation on all endpoints
 
-| Variable Name | Description | Default Value |
-| --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | The URL of your SaaS application | `http://localhost:3000` |
-| `NEXT_PUBLIC_PRODUCT_NAME` | The name of your SaaS product | `Makerkit` |
-| `NEXT_PUBLIC_SITE_TITLE` | The title of your SaaS product | `Makerkit - The easiest way to build and manage your SaaS` |
-| `NEXT_PUBLIC_SITE_DESCRIPTION` | The description of your SaaS product | `Makerkit is the easiest way to build and manage your SaaS. It provides you with the tools you need to build your SaaS, without the hassle of building it from scratch.` |
-| `NEXT_PUBLIC_DEFAULT_THEME_MODE` | The default theme mode of your SaaS product | `light` |
-| `NEXT_PUBLIC_THEME_COLOR` | The default theme color of your SaaS product | `#ffffff` |
-| `NEXT_PUBLIC_THEME_COLOR_DARK` | The default theme color of your SaaS product in dark mode | `#0a0a0a` |
-| `NEXT_PUBLIC_SUPABASE_URL` | The URL of your Supabase project | `http://127.0.0.1:54321` |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | The anon key of your Supabase project | ''
-| `SUPABASE_SERVICE_ROLE_KEY` | The service role key of your Supabase project | ''
+---
 
-## Architecture
+## 📄 License
 
-This starter kit uses a monorepo architecture.
+**⚠️ PROPRIETARY SOFTWARE - ALL RIGHTS RESERVED**
 
-1. The `apps/web` directory is the Next.js application.
-2. The `packages` directory contains all the packages used by the application.
-3. The `packages/features` directory contains all the features of the application.
-4. The `packages/ui` directory contains all the UI components.
+This software is the exclusive property of the SmartClaim AI development team. 
 
-For more information about the architecture, please refer to the [Makerkit blog post about Next.js Project Structure](https://makerkit.dev/blog/tutorials/nextjs-app-router-project-structure).
+- ❌ **NO** commercial use
+- ❌ **NO** personal use
+- ❌ **NO** modification
+- ❌ **NO** distribution
+- ❌ **NO** reverse engineering
 
-### Marketing Pages
+See [LICENSE](LICENSE) for the complete license agreement.
 
-Marketing pages are located in the `apps/web/app/(marketing)` directory. These pages are used to showcase the features of the SaaS and provide information about the product.
+---
 
-### Authentication
+## 👥 Authors
 
-Authenticated is backed by Supabase. The `apps/web/app/auth` directory contains the authentication pages, however, the logic is into its own package `@kit/auth` located in `packages/features/auth`.
+**SmartClaim AI Development Team**
 
-This package can be used across multiple applications.
+- **Wiame EL HAFID & Houssam RJILI** - Lead Developers & System Architects
 
-### Gated Pages
+---
 
-Gated pages are located in the `apps/web/app/home` directory. Here is where you can build your SaaS pages that are gated by authentication.
+## 📞 Contact
 
-### Database
+For licensing inquiries or authorized access requests:
 
-The Supabase database is located in the `apps/web/supabase` directory. In this directory you will find the database schema, migrations, and seed data.
+- 📧 Email: contact@smartclaim.ai
+- 🔗 GitHub: [@WE2722](https://github.com/WE2722) and [@HxRjili](https://github.com/HxRjili)
 
-#### Creating a new migration
-To create a new migration, run the following command:
+---
 
-```bash
-pnpm --filter web supabase migration new --name <migration-name>
-```
+<p align="center">
+  <sub>Built with ❤️ for industrial safety and efficiency</sub>
+</p>
 
-This command will create a new migration file in the `apps/web/supabase/migrations` directory. 
-
-#### Applying a migration
-
-Once you have created a migration, you can apply it to the database by running the following command:
-
-```bash
-pnpm run supabase:web:reset
-```
-
-This command will apply the migration to the database and update the schema. It will also reset the database using the provided seed data.
-
-#### Linking the Supabase database
-
-Linking the local Supabase database to the Supabase project is done by running the following command:
-
-```bash
-pnpm --filter web supabase db link
-```
-
-This command will link the local Supabase database to the Supabase project.
-
-#### Pushing the migration to the Supabase project
-
-After you have made changes to the migration, you can push the migration to the Supabase project by running the following command:
-
-```bash
-pnpm --filter web supabase db push
-```
-
-This command will push the migration to the Supabase project. You can now apply the migration to the Supabase database.
-
-## Going to Production
-
-#### 1. Create a Supabase project
-
-To deploy your application to production, you will need to create a Supabase project.
-
-#### 2. Push the migration to the Supabase project
-
-After you have made changes to the migration, you can push the migration to the Supabase project by running the following command:
-
-```bash
-pnpm --filter web supabase db push
-```
-
-This command will push the migration to the Supabase project.
-
-#### 3. Set the Supabase Callback URL
-
-When working with a remote Supabase project, you will need to set the Supabase Callback URL.
-
-Please set the callback URL in the Supabase project settings to the following URL:
-
-`<url>/auth/callback`
-
-Where `<url>` is the URL of your application.
-
-#### 4. Deploy to Vercel or any other hosting provider
-
-You can deploy your application to any hosting provider that supports Next.js.
-
-#### 5. Deploy to Cloudflare
-
-The configuration should work as is, but you need to set the runtime to `edge` in the root layout file (`apps/web/app/layout.tsx`).
-
-```tsx
-export const runtime = 'edge';
-```
-
-Remember to enable Node.js compatibility in the Cloudflare dashboard.
-
-## Contributing
-
-Contributions for bug fixed are welcome! However, please open an issue first to discuss your ideas before making a pull request.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
-## Support
-
-No support is provided for this kit. Feel free to open an issue if you have any questions or need help, but there is no guaranteed response time, nor guarantee a fix.
-
-For dedicated support, priority fixes, and advanced features, [check out our full version](https://makerkit.dev).
+<p align="center">
+  <sub>© 2025-2026 SmartClaim AI. All Rights Reserved.</sub>
+</p>

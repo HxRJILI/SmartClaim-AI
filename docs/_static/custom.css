@@ -1,0 +1,9 @@
+/* SmartClaim AI custom styles for Read the Docs */
+
+.wy-nav-content {
+    max-width: 1200px;
+}
+
+.rst-content h1 {
+    color: #2980B9;
+}
