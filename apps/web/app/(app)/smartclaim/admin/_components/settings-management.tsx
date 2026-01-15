@@ -76,43 +76,60 @@ export function SettingsManagement({ initialSettings }: SettingsManagementProps)
     setHasChanges(changed);
   }, [settings, originalSettings]);
 
-  // Check services health
+  // Check services health via server-side API to avoid CORS issues
   const checkServices = async () => {
     setCheckingServices(true);
-    const services: ServiceStatus[] = [
-      { name: 'Extractor', url: 'http://localhost:8000/health', status: 'checking' },
-      { name: 'Classifier (LLM)', url: 'http://localhost:8001/health', status: 'checking' },
-      { name: 'Chat', url: 'http://localhost:8002/health', status: 'checking' },
-      { name: 'Transcriber (ASR)', url: 'http://localhost:8003/health', status: 'checking' },
-      { name: 'RAG', url: 'http://localhost:8004/health', status: 'checking' },
-      { name: 'LVM (Vision)', url: 'http://localhost:8005/health', status: 'checking' },
-      { name: 'Aggregator', url: 'http://localhost:8006/health', status: 'checking' },
-      { name: 'SLA Predictor', url: 'http://localhost:8007/health', status: 'checking' },
+    
+    // Set initial checking state
+    const initialServices: ServiceStatus[] = [
+      { name: 'Extractor', url: 'http://localhost:8000', status: 'checking' },
+      { name: 'Classifier (LLM)', url: 'http://localhost:8001', status: 'checking' },
+      { name: 'Chat', url: 'http://localhost:8002', status: 'checking' },
+      { name: 'Transcriber (ASR)', url: 'http://localhost:8003', status: 'checking' },
+      { name: 'RAG', url: 'http://localhost:8004', status: 'checking' },
+      { name: 'LVM (Vision)', url: 'http://localhost:8005', status: 'checking' },
+      { name: 'Aggregator', url: 'http://localhost:8006', status: 'checking' },
+      { name: 'SLA Predictor', url: 'http://localhost:8007', status: 'checking' },
     ];
+    setServiceStatuses(initialServices);
 
-    setServiceStatuses(services);
+    try {
+      // Use server-side API route to check services (avoids CORS)
+      const response = await fetch('/api/smartclaim/services/health', {
+        method: 'GET',
+        signal: AbortSignal.timeout(30000), // 30s timeout for all services
+      });
 
-    // Check each service
-    const updatedServices = await Promise.all(
-      services.map(async (service) => {
-        try {
-          const response = await fetch(service.url, { 
-            method: 'GET',
-            signal: AbortSignal.timeout(5000),
-          });
-          const data = await response.json();
-          return {
-            ...service,
-            status: data.status === 'healthy' ? 'healthy' : 'unhealthy',
-            version: data.version,
-          } as ServiceStatus;
-        } catch {
-          return { ...service, status: 'unhealthy' } as ServiceStatus;
-        }
-      })
-    );
+      if (!response.ok) {
+        throw new Error('Failed to check services');
+      }
 
-    setServiceStatuses(updatedServices);
+      const data = await response.json();
+      
+      // Map the response to our ServiceStatus format
+      const updatedServices: ServiceStatus[] = data.services.map((service: {
+        name: string;
+        url: string;
+        status: 'healthy' | 'unhealthy';
+        version?: string;
+      }) => ({
+        name: service.name,
+        url: service.url,
+        status: service.status,
+        version: service.version,
+      }));
+
+      setServiceStatuses(updatedServices);
+    } catch (error) {
+      // If API call fails, mark all services as unhealthy
+      console.error('Failed to check services:', error);
+      const failedServices = initialServices.map(service => ({
+        ...service,
+        status: 'unhealthy' as const,
+      }));
+      setServiceStatuses(failedServices);
+    }
+
     setCheckingServices(false);
   };
 

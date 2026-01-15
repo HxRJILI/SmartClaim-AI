@@ -44,7 +44,7 @@ class Settings(BaseSettings):
     SUPABASE_DB_PASSWORD: str = "postgres"
     
     # Gemini Configuration (for reranking/generation)
-    GEMINI_API_KEY: str = "AIzaSyBkuu6HZHTrMqtni0rsqepjhyyppu5Oh1U"
+    GEMINI_API_KEY: str = ""  # Set via environment variable
     
     class Config:
         env_file = ".env"

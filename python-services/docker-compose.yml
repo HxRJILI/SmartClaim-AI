@@ -29,7 +29,7 @@ services:
     ports:
       - "8001:8001"
     environment:
-      - GEMINI_API_KEY=${GEMINI_API_KEY:-AIzaSyBkuu6HZHTrMqtni0rsqepjhyyppu5Oh1U}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
       - LOG_LEVEL=info
     dns:
       - 8.8.8.8
@@ -44,7 +44,7 @@ services:
     ports:
       - "8002:8002"
     environment:
-      - GEMINI_API_KEY=${GEMINI_API_KEY:-AIzaSyBkuu6HZHTrMqtni0rsqepjhyyppu5Oh1U}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
       - RAG_SERVICE_URL=http://rag:8004
       - LOG_LEVEL=info
     volumes:
